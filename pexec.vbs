@@ -1,6 +1,6 @@
 ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 '' pexec.vbs
-'' v1.01, 2014-11-05, 05:16:32 CST
+'' v1.02, 2014-11-05, 05:43:42 CST
 ''
 '' AUTHOR: Mark R. Gollnick <mark.r.gollnick@gmail.com>
 '' HOMEPAGE: http://github.com/markgollnick
@@ -9,8 +9,8 @@
 ''   Print the parent process location. Useful for iexpress.exe packages.
 ''
 '' USAGE:
-''   cscript pexec.vbs p.exe (if called from cmd.exe, calls "p.exe cmd.exe")
-''   wscript pexec.vbs p.exe (calls "p.exe explorer.exe", etc.)
+''   cscript pexec.vbs (if called from cmd.exe, prints C:\path\to\cmd.exe)
+''   wscript pexec.vbs (if called from explorer.exe, prints its path, etc.)
 ''
 '' ACKNOWLEDGEMENTS:
 ''   http://stackoverflow.com/questions/13534699/iexpress-extraction-path/13700281#13700281
@@ -21,26 +21,22 @@
 Option Explicit
 
 Dim objShell, objWMI, objCmd, objMyParent
-Dim strCmd, strMyParentPath
+Dim strMyParentPath
 Dim intMyPid, intMyParentPid, intParents
 
 If WScript.Arguments.Count < 1 Then
   WScript.Echo(_
-    "pexec 1.00, a parental executor." & vbCrLf & _
-    "Usage: [c|w]script " & WScript.ScriptName & " <cmd>" & vbCrLf & _
-    vbCrLf & _
-    "Example:" & vbCrLf & _
-    """cscript pexec.vbs program.exe"", if run from cmd.exe," & vbCrLf & _
-    "will call ""program.exe C:\path\to\cmd.exe""." & vbCrLf & _
-    "This is useful for iexpress.exe packages and the like." _
+    "pexec 1.02, a parental executor." & vbCrLf & _
+    "Usage: [c|w]script " & WScript.ScriptName & " <1..*>" & vbCrLf & _
+    "Prints the executing parent's path x levels up the stack." & vbCrLf & _
+    "Useful for iexpress.exe packages and the like." _
   )
   WScript.Quit
 Else
-  strCmd = WScript.Arguments(0)
   intParents = 1
-  If WScript.Arguments.Count > 1 Then
-    If Abs(WScript.Arguments(1)) > 0 Then
-      intParents = Abs(WScript.Arguments(1))
+  If WScript.Arguments.Count >= 1 Then
+    If Abs(WScript.Arguments(0)) > 0 Then
+      intParents = Abs(WScript.Arguments(0))
     End If
   End If
 End If
@@ -60,5 +56,4 @@ Do While intParents > 0
   intParents = intParents - 1
 Loop
 
-'' WScript.Echo strCmd & " " & """" & strMyParentPath & """"
-objShell.Run strCmd & " " & """" & strMyParentPath & """"
+WScript.Echo """" & strMyParentPath & """"
