@@ -3,7 +3,7 @@
 '' v1.02, 2014-11-05, 05:43:42 CST
 ''
 '' AUTHOR: Mark R. Gollnick <mark.r.gollnick@gmail.com>
-'' HOMEPAGE: http://github.com/markgollnick
+'' HOMEPAGE: https://github.com/markgollnick
 ''
 '' DESCRIPTION:
 ''   Print the parent process location. Useful for iexpress.exe packages.
