@@ -1,6 +1,6 @@
 ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 '' pexec.vbs
-'' v1.00, 2014-11-05, 03:31:36 CST
+'' v1.01, 2014-11-05, 05:16:32 CST
 ''
 '' AUTHOR: Mark R. Gollnick <mark.r.gollnick@gmail.com>
 '' HOMEPAGE: http://github.com/markgollnick
@@ -22,7 +22,7 @@ Option Explicit
 
 Dim objShell, objWMI, objCmd, objMyParent
 Dim strCmd, strMyParentPath
-Dim intMyPid, intMyParentPid
+Dim intMyPid, intMyParentPid, intParents
 
 If WScript.Arguments.Count < 1 Then
   WScript.Echo(_
@@ -37,6 +37,12 @@ If WScript.Arguments.Count < 1 Then
   WScript.Quit
 Else
   strCmd = WScript.Arguments(0)
+  intParents = 1
+  If WScript.Arguments.Count > 1 Then
+    If Abs(WScript.Arguments(1)) > 0 Then
+      intParents = Abs(WScript.Arguments(1))
+    End If
+  End If
 End If
 
 Set objShell = CreateObject("WScript.Shell")
@@ -46,9 +52,13 @@ Set objCmd = objShell.Exec("cmd.exe")
 intMyPid = objWMI.Get("Win32_Process.Handle='" & objCmd.ProcessID & "'").ParentProcessId
 objCmd.Terminate
 
-intMyParentPid = objWMI.Get("Win32_Process.Handle='" & intMyPid & "'").ParentProcessId
-Set objMyParent = objWMI.Get("Win32_Process.Handle='" & intMyParentPid & "'")
-strMyParentPath = objMyParent.ExecutablePath
+Do While intParents > 0
+  intMyParentPid = objWMI.Get("Win32_Process.Handle='" & intMyPid & "'").ParentProcessId
+  Set objMyParent = objWMI.Get("Win32_Process.Handle='" & intMyParentPid & "'")
+  strMyParentPath = objMyParent.ExecutablePath
+  intMyPid = intMyParentPid
+  intParents = intParents - 1
+Loop
 
 '' WScript.Echo strCmd & " " & """" & strMyParentPath & """"
 objShell.Run strCmd & " " & """" & strMyParentPath & """"
