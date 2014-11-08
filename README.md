@@ -1,6 +1,8 @@
 iespresso
 =========
 
+![Espresso](https://github.com/markgollnick/iespresso/tree/master/espresso.png)
+
 It's like `iexpress.exe` on caffeine!
 
 
@@ -20,16 +22,33 @@ This functionality is not readily available via [iexpress.exe][] itself.
 Usage
 -----
 
-1. Include pexec.vbs (the "parent executable" locator) and pcopy.bat (the
-   "persistent copy" script, since iexpress files are temporary and will be
-   deleted after install) along with your other files in the iexpress package.
-2. The install line (set in IExpress Wizard) MUST be "cmd.exe /c pcopy.bat ..."
-3. Optional: Replace "..." above with a command to run AFTER extraction. The
-   command or script will be run with the location the package was executed in
-   as the current working directory. Alternatively, don't specify anything
-   after pcopy.bat to silently extract everything to the current directory.
-4. Done. All files in the package (except for pexec.vbs and pcopy.bat) will be
-   extracted to the current working directory, and your installer may be run.
+1.  Include `iespress.vbs` and `iespress.bat` (along with all your other files)
+    in your `iexpress.exe` package or silent installer.
+
+2.  The install line (set in the IExpress Wizard) MUST look like the following:
+
+        cmd.exe /c iespress.bat "..."
+
+3.  *Optional:* Replace `"..."` above with a command to run AFTER extraction.
+    The command will be run with the location of the original package's EXE
+    file as the current working directory. (Normally, all such commands would
+    be run from whatever %TEMP% directory the `iexpress.exe` package saw fit to
+    extract itself to. This gives you a little bit more flexibility.)
+
+4.  **Done.** All files in the package (except for the files `iespress.vbs` and
+    `iespress.bat`) will be extracted to the current working directory, and
+    your installer may be run.
+
+
+Known Limitations
+-----------------
+
+You may wish for your files to be extracted to a subdirectory bearing the same
+name as the original package instead of having them expand all willy-nilly to
+the current working directory. This functionality may come in a future version
+of iespresso, but for now, you’ll just have to hard-package your files in a
+folder during the IExpress Wizard if you want your files to be expanded to a
+directory level below the original package.
 
 
 Acknowledgments
@@ -38,3 +57,7 @@ Acknowledgments
 - http://msdn.microsoft.com/en-us/library/ff553615.aspx
 - http://stackoverflow.com/questions/13534699/iexpress-extraction-path/13700281#13700281
 - http://msdn.microsoft.com/en-us/library/aa394599(v=vs.85).aspx
+- User “[Pipo][1]” for the beautiful (and free) [Espresso icon][2]! :-)
+
+[1]: https://openclipart.org/user-detail/pipo
+[2]: https://openclipart.org/detail/3741/espresso-by-pipo
