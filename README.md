@@ -61,3 +61,9 @@ Acknowledgments
 
 [1]: https://openclipart.org/user-detail/pipo
 [2]: https://openclipart.org/detail/3741/espresso-by-pipo
+
+
+License
+-------
+
+Boost Software License, Version 1.0: <http://www.boost.org/LICENSE_1_0.txt>
